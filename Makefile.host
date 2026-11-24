@@ -1,0 +1,3 @@
+# Headless logic test on a PC (no graphics): make -f Makefile.host && ASSETS=assets ./pedro_test
+pedro_test: src/game.c src/platform_stub.c
+	gcc -DHEADLESS -O1 -Wall -o pedro_test src/game.c src/platform_stub.c -lm

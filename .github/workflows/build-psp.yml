@@ -1,0 +1,28 @@
+name: Build PSP EBOOT
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build PSP
+        run: |
+          docker pull pspdev/pspdev:latest
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/source" \
+            -w /source \
+            pspdev/pspdev:latest \
+            sh -c 'echo "$PATH"; command -v psp-gcc; psp-gcc --version && make dist'
+
+      - name: Upload EBOOT
+        uses: actions/upload-artifact@v4
+        with:
+          name: Pedro-PSP-Alpha-1.12
+          path: dist/
